@@ -1,14 +1,20 @@
-const { mkdir, readdir, copyFile } = require('fs');
+const { unlink, readdir, copyFile } = require('fs');
+const fsPromise = require('fs/promises');
 const { resolve } = require('path');
 const { stdout } = process;
 
 const readFrom = resolve(__dirname, 'files'),
       writeTo  = readFrom + '-copy';
 
-function copyDir(readFrom, writeTo) {
-  mkdir(writeTo, { recursive: true }, err => {
-    if (err) throw err;
-  });
+async function copyDir(readFrom, writeTo) {
+  await fsPromise.mkdir(writeTo, { recursive: true })
+
+  let existingCopy = await fsPromise.readdir(writeTo, { withFileTypes: true });
+  for (const file of existingCopy) {
+    unlink( resolve(writeTo, `${ file.name }`), err => {
+      if (err) throw err;
+    });
+  }
 
   readdir(readFrom, { withFileTypes: true }, (err, files) => {
     if (err) throw err;
