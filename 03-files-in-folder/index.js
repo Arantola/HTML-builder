@@ -7,7 +7,7 @@ const folderPath = resolve(__dirname, 'secret-folder');
 readdir(folderPath, { withFileTypes: true }, (err, files) => {
   if (err) throw err;
 
-  stdout.write("\nCurrent directory files:");
+  stdout.write("\nCurrent directory files:\n");
 
   files.forEach( file => {
     if (file.isFile()) {
