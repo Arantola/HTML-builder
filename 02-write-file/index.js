@@ -14,3 +14,4 @@ stdin.on('data', data => {
 });
 
 process.on('exit', () => stdout.write('\nEnd of record. text.txt rewrited\n'));
+process.on('SIGINT', () => process.exit());
